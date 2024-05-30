@@ -3,11 +3,13 @@ run-name: "Remove DEVELOPMENT_TEAM from xcode project"
 
 on:
   push:
+    branches: [development]
   workflow_dispatch:
 
 jobs:
   clean:
     runs-on: ubuntu-latest
+    if: github.repository_owner == 'AuroraEditor'
     env:
       xcodeproj: "Aurora Editor.xcodeproj/project.pbxproj"
     steps:
@@ -40,4 +42,4 @@ jobs:
       run: |
         git add . --all
         git commit -m "Removed development team"
-        git push origin HEAD:main --force
+        git push origin HEAD:development --force
