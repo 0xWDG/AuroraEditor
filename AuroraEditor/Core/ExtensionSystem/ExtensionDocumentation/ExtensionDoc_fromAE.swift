@@ -140,7 +140,7 @@ public protocol ExtensionDocumentationFromAuroraEditor {
 
     /// Command pallette did disappear
     func commandPalletteDidDisappear()
-    
+
     /// Command palette did select (run)
     /// 
     /// - Parameter name: Command name
