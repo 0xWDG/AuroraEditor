@@ -1,5 +1,5 @@
 //
-//  notifyExtensions.swift
+//  PreferencesView.swift
 //  Aurora Editor
 //
 //  Created by Nanashi Li on 2022/08/18.

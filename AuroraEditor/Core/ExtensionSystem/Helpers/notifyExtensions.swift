@@ -1,5 +1,5 @@
 //
-//  onAppearDissapear.swift
+//  notifyExtensions.swift
 //  Aurora Editor
 //
 //  Created by Wesley de Groot on 27/08/2024.
