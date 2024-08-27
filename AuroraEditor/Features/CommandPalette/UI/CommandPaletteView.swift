@@ -161,23 +161,12 @@ struct CommandPaletteView: View {
                 .listStyle(.sidebar)
             }
         }
+        .on(name: "commandPalette")
         .background(EffectView(.sidebar, blendingMode: .behindWindow))
         .edgesIgnoringSafeArea(.vertical)
         .frame(minWidth: 600,
            minHeight: self.state.isShowingCommands ? 400 : 28,
            maxHeight: self.state.isShowingCommands ? .infinity : 28)
-        .onAppear {
-            ExtensionsManager.shared.sendEvent(
-                event: "commandPalletteDidAppear",
-                parameters: [:]
-            )
-        }
-        .onDisappear {
-            ExtensionsManager.shared.sendEvent(
-                event: "commandPalletteDidDisappear",
-                parameters: [:]
-            )
-        }
     }
 }
 
