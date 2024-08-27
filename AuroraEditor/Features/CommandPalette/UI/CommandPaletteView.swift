@@ -59,6 +59,13 @@ struct CommandPaletteView: View {
 
         case 36: // enter key
             if let selectedCommand = selectedCommand {
+                ExtensionsManager.shared.sendEvent(
+                    event: "commandPalletteDidSelect",
+                    parameters: [
+                        "name": selectedCommand.name
+                    ]
+                )
+
                 selectedCommand.command()
             }
             self.onClose()
@@ -159,6 +166,18 @@ struct CommandPaletteView: View {
         .frame(minWidth: 600,
            minHeight: self.state.isShowingCommands ? 400 : 28,
            maxHeight: self.state.isShowingCommands ? .infinity : 28)
+        .onAppear {
+            ExtensionsManager.shared.sendEvent(
+                event: "commandPalletteDidAppear",
+                parameters: [:]
+            )
+        }
+        .onDisappear {
+            ExtensionsManager.shared.sendEvent(
+                event: "commandPalletteDidDisappear",
+                parameters: [:]
+            )
+        }
     }
 }
 

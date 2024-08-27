@@ -12,6 +12,17 @@ import AEExtensionKit
 /// This class does not execute any code, this is made to generate documentation for the extension system
 /// This are items which an extension can expect from AuroraEditor.
 /// To see what you can send to Aurora Editor see ``ExtensionDocumentationToAuroraEditor``.
+///
+/// To send a command from Aurora Editor to the extensions use:
+///
+/// ```swift
+/// ExtensionsManager.shared.sendEvent(
+///     event: "auroraeditorDidChangeFontNameTo",
+///     parameters: [
+///         "name": "Aurora Editor Font"
+///     ]
+/// )
+/// ```
 public protocol ExtensionDocumentationFromAuroraEditor {
     /// Build the editor view for a specific file.
     ///
@@ -123,4 +134,22 @@ public protocol ExtensionDocumentationFromAuroraEditor {
     /// - Parameter identifier: Notification identifier
     /// - Parameter extension: Extension name
     func didDismissNotification(identifier: String, extension: String)
+
+    /// Command pallette did appear
+    func commandPalletteDidAppear()
+
+    /// Command pallette did disappear
+    func commandPalletteDidDisappear()
+    
+    /// Command palette did select (run)
+    /// 
+    /// - Parameter name: Command name
+    func commandPalletteDidSelect(name: String)
+
+    /// Welcome window did appear
+    func welcomeDidAppear()
+
+    /// Welcome window did disappear
+    func welcomeDidDisappear()
+
 }
