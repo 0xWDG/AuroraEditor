@@ -144,15 +144,26 @@ struct NavigatorSidebar: View {
     func sidebarModuleContent(toolbar: Int) -> some View {
         VStack {
             switch selections[toolbar] {
-            case 0: ProjectNavigator()
-            case 1: SourceControlNavigatorView(workspace: workspace)
+            case 0:
+                ProjectNavigator()
+                    .on(name: "projectNavigator")
+            case 1:
+                SourceControlNavigatorView(workspace: workspace)
+                    .on(name: "sourceControlNavigator")
                     .environmentObject(versionControl)
-            case 2: FindNavigator(state: workspace.searchState ?? .init(workspace))
-            case 5: NotificationsNavigatorView()
-            case 6: HierarchyNavigator()
+            case 2:
+                FindNavigator(state: workspace.searchState ?? .init(workspace))
+                    .on(name: "findNavigator")
+            case 5:
+                NotificationsNavigatorView()
+                    .on(name: "notificationsNavigator")
+            case 6:
+                HierarchyNavigator()
+                    .on(name: "hierarchyNavigator")
             case 7:
                 if let extensionNavigatorData = workspace.extensionNavigatorData {
                     ExtensionNavigator(data: extensionNavigatorData)
+                        .on(name: "extensionNavigator")
                         .environmentObject(workspace)
                 }
             default:

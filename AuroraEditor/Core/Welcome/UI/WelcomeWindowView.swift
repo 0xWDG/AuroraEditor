@@ -77,18 +77,7 @@ public struct WelcomeWindowView: View {
                 )
             }
             .edgesIgnoringSafeArea(.top)
-            .onAppear {
-                ExtensionsManager.shared.sendEvent(
-                    event: "welcomeDidAppear",
-                    parameters: [:]
-                )
-            }
-            .onDisappear {
-                ExtensionsManager.shared.sendEvent(
-                    event: "welcomeDidDisappear",
-                    parameters: [:]
-                )
-            }
+            .on(name: "welcome")
         }
     }
 }

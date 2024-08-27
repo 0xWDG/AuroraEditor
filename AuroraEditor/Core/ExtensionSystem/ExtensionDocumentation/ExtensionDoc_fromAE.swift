@@ -152,4 +152,55 @@ public protocol ExtensionDocumentationFromAuroraEditor {
     /// Welcome window did disappear
     func welcomeDidDisappear()
 
+    /// Terminal did appear
+    ///
+    /// - Parameter path: Current Terminal Path
+    func terminalDidAppear(path: String)
+
+    /// Terminal did appear
+    ///
+    /// - Parameter path: Current Terminal Path
+    func terminalDidDisappear(path: String)
+
+    /// Preferences did appear
+    func preferencesDidAppear()
+
+    /// Preferences did disappear
+    func preferencesDidDisppear()
+
+    /// Project navigator did appear
+    func projectNavigatorDidAppear()
+
+    /// Project navigator did disappear
+    func projectNavigatorDidDisappear()
+
+    /// Source control navigator did appear
+    func sourceControlNavigatorDidAppear()
+
+    /// Source control navigator did disappear
+    func sourceControlNavigatorDidDisappear()
+
+    /// Find navigator did appear
+    func findNavigatorDidAppear()
+
+    /// Find navigator did disappear
+    func findNavigatorDidDisappear()
+
+    /// Notifications navigator did appear
+    func notificationsNavigatorDidAppear()
+
+    /// Notifications navigator did disappear
+    func notificationsNavigatorDidDisappear()
+
+    /// Hierarchy navigator did appear
+    func hierarchyNavigatorDidAppear()
+
+    /// Hierarchy navigator did disappear
+    func hierarchyNavigatorDidDisappear()
+
+    /// Extension navigator did appear
+    func extensionNavigatorDidAppear()
+
+    /// Extension navigator did disappear
+    func extensionNavigatorDidDisappear()
 }
