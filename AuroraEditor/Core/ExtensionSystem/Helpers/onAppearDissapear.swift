@@ -16,7 +16,7 @@ extension View {
     /// - Parameter disappear: On disappear parameters
     /// 
     /// - Returns: The current view.
-    public func on(
+    public func notifyExtensions(
         name: String,
         appear: [String: Any] = [:],
         disappear: [String: Any] = [:]

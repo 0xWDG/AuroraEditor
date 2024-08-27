@@ -161,7 +161,7 @@ struct CommandPaletteView: View {
                 .listStyle(.sidebar)
             }
         }
-        .on(name: "commandPalette")
+        .notifyExtensions(name: "commandPalette")
         .background(EffectView(.sidebar, blendingMode: .behindWindow))
         .edgesIgnoringSafeArea(.vertical)
         .frame(minWidth: 600,

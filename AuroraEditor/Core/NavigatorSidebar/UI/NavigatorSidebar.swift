@@ -146,24 +146,24 @@ struct NavigatorSidebar: View {
             switch selections[toolbar] {
             case 0:
                 ProjectNavigator()
-                    .on(name: "projectNavigator")
+                    .notifyExtensions(name: "projectNavigator")
             case 1:
                 SourceControlNavigatorView(workspace: workspace)
-                    .on(name: "sourceControlNavigator")
+                    .notifyExtensions(name: "sourceControlNavigator")
                     .environmentObject(versionControl)
             case 2:
                 FindNavigator(state: workspace.searchState ?? .init(workspace))
-                    .on(name: "findNavigator")
+                    .notifyExtensions(name: "findNavigator")
             case 5:
                 NotificationsNavigatorView()
-                    .on(name: "notificationsNavigator")
+                    .notifyExtensions(name: "notificationsNavigator")
             case 6:
                 HierarchyNavigator()
-                    .on(name: "hierarchyNavigator")
+                    .notifyExtensions(name: "hierarchyNavigator")
             case 7:
                 if let extensionNavigatorData = workspace.extensionNavigatorData {
                     ExtensionNavigator(data: extensionNavigatorData)
-                        .on(name: "extensionNavigator")
+                        .notifyExtensions(name: "extensionNavigator")
                         .environmentObject(workspace)
                 }
             default:

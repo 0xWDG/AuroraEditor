@@ -68,18 +68,7 @@ struct PreferencesView: View {
                 maxHeight: .infinity
             )
         }
-        .onAppear {
-            ExtensionsManager.shared.sendEvent(
-                event: "preferencesDidAppear",
-                parameters: [:]
-            )
-        }
-        .onDisappear {
-            ExtensionsManager.shared.sendEvent(
-                event: "preferencesDidDisppear",
-                parameters: [:]
-            )
-        }
+        .notifyExtensions(name: "preferences")
     }
 
     /// The setting content view

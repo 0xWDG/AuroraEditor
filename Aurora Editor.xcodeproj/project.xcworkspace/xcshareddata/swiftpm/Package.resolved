@@ -42,8 +42,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/0xWDG/DynamicUI",
       "state" : {
-         "revision" : "c545f89c7d15685ef3b4412236fed764cf4c2aed",
-         "version" : "0.0.8"
+        "revision" : "c545f89c7d15685ef3b4412236fed764cf4c2aed",
+        "version" : "0.0.8"
       }
     },
     {

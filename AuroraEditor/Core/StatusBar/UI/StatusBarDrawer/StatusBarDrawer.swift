@@ -42,7 +42,7 @@ internal struct StatusBarDrawer: View {
             switch model.selectedTab {
             case 0:
                 TerminalEmulatorView(url: model.workspaceURL)
-                    .on(
+                    .notifyExtensions(
                         name: "terminal",
                         appear: [
                             "path": model.workspaceURL.relativePath
