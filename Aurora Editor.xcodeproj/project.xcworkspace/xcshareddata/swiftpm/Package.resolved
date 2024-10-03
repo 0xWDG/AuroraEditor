@@ -25,7 +25,7 @@
       "location" : "https://github.com/AuroraEditor/AuroraEditorSourceEditor",
       "state" : {
         "branch" : "main",
-        "revision" : "1286a1ab0a5a1a983477cccf1d824e5583d77ba7"
+        "revision" : "c67e5648025c934255829f1376376f122dfc8dfc"
       }
     },
     {
@@ -42,8 +42,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/0xWDG/DynamicUI",
       "state" : {
-         "revision" : "c545f89c7d15685ef3b4412236fed764cf4c2aed",
-         "version" : "0.0.8"
+        "revision" : "c545f89c7d15685ef3b4412236fed764cf4c2aed",
+        "version" : "0.0.8"
       }
     },
     {
@@ -52,7 +52,7 @@
       "location" : "https://github.com/groue/GRDB.swift",
       "state" : {
         "branch" : "master",
-        "revision" : "04543755d8deeaacf122e2856e4fc056dc304277"
+        "revision" : "dc03b8a29e2f5d51bd41e0971bba9a9975a29934"
       }
     },
     {
@@ -69,8 +69,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-cocoa.git",
       "state" : {
-        "revision" : "5a601a24aa1b3fb29fcdb824633f050e08257e92",
-        "version" : "8.30.1"
+        "revision" : "5575af93efb776414f243e93d6af9f6258dc539a",
+        "version" : "8.36.0"
       }
     },
     {
@@ -78,8 +78,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-collections.git",
       "state" : {
-        "revision" : "3d2dc41a01f9e49d84f0a3925fb858bed64f702d",
-        "version" : "1.1.2"
+        "revision" : "671108c96644956dddcd89dd59c203dcdb36cec7",
+        "version" : "1.1.4"
       }
     },
     {
