@@ -22,7 +22,7 @@ class JSSupport: ExtensionInterface {
     var context = JSContext()
 
     /// Responder (typealias because of cleaner code)
-    typealias Responder = @convention (block) (String, [String: Any]) -> Any
+    typealias Responder = @convention(block) (String, [String: Any]) -> Any
 
     /// Create a function which returns "AEContext", it should be start witht the semicolon because we
     /// do not know if the last line of the extension is a newline.
@@ -129,7 +129,7 @@ class JSSupport: ExtensionInterface {
 
     /// Register the required functions for the JS API.
     func registerFunctions() {
-        let log: @convention (block) (String) -> Bool = { (message: String) in
+        let log: @convention(block) (String) -> Bool = { (message: String) in
             self.jsLogger.debug("JSAPI Message: \(message)")
 
             return true

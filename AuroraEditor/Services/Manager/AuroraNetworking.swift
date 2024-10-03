@@ -125,7 +125,7 @@ class AuroraNetworking { // swiftlint:disable:this type_body_length
 
                 // Save our cookies
                 AuroraNetworking.cookies = session?.configuration.httpCookieStorage?.cookies
-                AuroraNetworking.fullResponse = String(decoding: sitedata, as: UTF8.self)
+                AuroraNetworking.fullResponse = String(data: sitedata, encoding: .utf8)
 
                 if let httpResponse = response as? HTTPURLResponse {
                     self.networkLog(
@@ -143,7 +143,7 @@ class AuroraNetworking { // swiftlint:disable:this type_body_length
                         return completionHandler(
                             .failure(
                                 NetworkingError(
-                                    message: String(decoding: sitedata, as: UTF8.self)
+                                    message: String(data: sitedata, encoding: .utf8) ?? "Unknown error"
                                 )
                             )
                         )
@@ -333,8 +333,9 @@ class AuroraNetworking { // swiftlint:disable:this type_body_length
             }
         }
         self.logger.debug("\n  Body:")
-        if let httpBody = request.httpBody {
-            self.logger.debug("    \(String(decoding: httpBody, as: UTF8.self))")
+        if let httpBody = request.httpBody,
+           let httpBodyValue = String(data: httpBody, encoding: .utf8) {
+            self.logger.debug("    \(httpBodyValue)")
         }
         self.logger.debug("\n")
     }
@@ -348,10 +349,11 @@ class AuroraNetworking { // swiftlint:disable:this type_body_length
     }
 
     private func networkLogData(data: Data) {
-        let stringData = String(decoding: data, as: UTF8.self)
-        self.logger.debug("\n  Body:")
-        for line in stringData.split(separator: "\n") {
-            self.logger.debug("    \(line)")
+        if let stringData = String(data: data, encoding: .utf8) {
+            self.logger.debug("\n  Body:")
+            for line in stringData.split(separator: "\n") {
+                self.logger.debug("    \(line)")
+            }
         }
 
         do {
@@ -364,9 +366,5 @@ class AuroraNetworking { // swiftlint:disable:this type_body_length
         } catch {
             self.logger.fault("\(error.localizedDescription)")
         }
-    }
-
-    private func handleNetworkError(data: Data) -> String {
-        return String(decoding: data, as: UTF8.self)
     }
 }

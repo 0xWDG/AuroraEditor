@@ -126,7 +126,11 @@ public final class CodeFileDocument: NSDocument, ObservableObject, QLPreviewItem
     /// 
     /// - Throws: Error if failed to read.
     override public func read(from data: Data, ofType _: String) throws {
-        self.content = String(decoding: data, as: UTF8.self)
+        if let contents = String(data: data, encoding: .utf8) {
+            self.content = contents
+        }
+
+        throw NSError(domain: "com.auroraeditor.CodeFileDocumentError", code: 1)
     }
 
     /// Save document. (custom function)

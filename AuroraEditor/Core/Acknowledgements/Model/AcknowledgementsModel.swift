@@ -12,7 +12,7 @@ import SwiftUI
 final class AcknowledgementsModel: ObservableObject {
     @Published
     /// The dependencies
-    private (set) var acknowledgements: [Dependency]
+    private(set) var acknowledgements: [Dependency]
 
     /// Initializes the model
     public init(_ dependencies: [Dependency] = []) {

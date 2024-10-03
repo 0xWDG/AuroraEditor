@@ -143,12 +143,13 @@ struct ExtensionCustomView: View {
             callback: { component in
                 let eventHandler = component.eventHandler ?? "uiElementChanged"
 
-                guard let data = try? JSONEncoder().encode(component) else {
+                guard let data = try? JSONEncoder().encode(component),
+                      let view = String(data: json, encoding: .utf8) else {
                     ExtensionsManager.shared.sendEvent(
                         event: eventHandler,
                         parameters: [
                             "extension": sender,
-                            "view": String(decoding: json, as: UTF8.self)
+                            "view": view
                         ]
                     )
 
@@ -159,8 +160,8 @@ struct ExtensionCustomView: View {
                     event: eventHandler,
                     parameters: [
                         "extension": sender,
-                        "view": String(decoding: json, as: UTF8.self),
-                        "component": String(decoding: data, as: UTF8.self)
+                        "view": String(data: json, encoding: .utf8) ?? "Unknown view",
+                        "component": String(data: data, encoding: .utf8) ?? "Unknown component"
                     ]
                 )
             }
@@ -171,7 +172,7 @@ struct ExtensionCustomView: View {
                 parameters: [
                     "type": "DynamicUI",
                     "extension": sender,
-                    "view": String(decoding: json, as: UTF8.self)
+                    "view": String(data: json, encoding: .utf8) ?? "Unknown view"
                 ]
             )
         }

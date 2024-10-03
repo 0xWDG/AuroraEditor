@@ -257,7 +257,7 @@ public final class ExtensionsManager {
 
 #if DEBUG
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
-        logger.info("Resign \(String(decoding: data, as: UTF8.self))")
+        logger.info("Resign \(String(describing: String(data: data, encoding: .utf8)))")
 #endif
 
         return task

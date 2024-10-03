@@ -142,8 +142,6 @@ public struct ThemeSetting: Codable { // swiftlint:disable:this type_body_length
                  fontThemeAttribute
         }
 
-        // swiftlint:disable:next swiftlint_file_disabling
-
         // swiftlint:disable:next cyclomatic_complexity function_body_length
         func encode(to encoder: Encoder) throws {
             var container = encoder.container(keyedBy: Keys.self)

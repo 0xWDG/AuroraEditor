@@ -120,9 +120,9 @@ class AuroraEditorConfig {
     /// - Parameter fromPath: from path
     init(fromPath: String) {
         if let configFile = findEditorConfig(fromPath: fromPath),
-           let configData = FileManager.default.contents(atPath: configFile) {
-
-            let parsed = AuroraINIParser(ini: String(decoding: configData, as: UTF8.self))
+           let configData = FileManager.default.contents(atPath: configFile),
+           let iniString = String(data: configData, encoding: .utf8) {
+            let parsed = AuroraINIParser(ini: iniString)
                 .parse()
             logger.info("INI=\(configFile)")
             logger.info("\(parsed)")

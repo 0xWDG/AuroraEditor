@@ -34,8 +34,9 @@ class JSCFetch {
                 URLSession.shared.dataTask(with: url) { (data, _, error) in
                     if let error = error {
                         promise.fail(error: error.localizedDescription)
-                    } else if let data = data {
-                        promise.success(value: String(decoding: data, as: UTF8.self))
+                    } else if let data = data,
+                              let value = String(data: data, encoding: .utf8) {
+                        promise.success(value: value)
                     } else {
                         promise.fail(error: "\(url) is empty")
                     }

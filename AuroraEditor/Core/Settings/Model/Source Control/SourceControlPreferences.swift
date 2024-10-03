@@ -104,7 +104,7 @@ struct SourceControlGit: Codable, FetchableRecord, PersistableRecord, DatabaseVa
         // Convert ignoredFiles to JSON string for database storage
         let jsonData = try? JSONEncoder().encode(ignoredFiles)
         container[CodingKeys.ignoredFiles.rawValue] = jsonData.flatMap {
-            String(decoding: $0, as: UTF8.self)
+            String(data: $0, encoding: .utf8)
         } ?? "[]"
     }
 

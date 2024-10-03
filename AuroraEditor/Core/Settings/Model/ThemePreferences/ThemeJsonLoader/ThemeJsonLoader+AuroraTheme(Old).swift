@@ -18,7 +18,7 @@ extension ThemeJsonLoader {
     public func loadOldAEThemeJson(from url: URL) -> AuroraTheme? {
         do {
             let data = try Data(contentsOf: url)
-            return themeFromOldAEThemeJson(jsonStr: String(decoding: data, as: UTF8.self))
+            return themeFromOldAEThemeJson(jsonStr: String(data: data, encoding: .utf8) ?? "")
         } catch {
             self.logger.info("Error loading theme: \(String(describing: error))")
         }

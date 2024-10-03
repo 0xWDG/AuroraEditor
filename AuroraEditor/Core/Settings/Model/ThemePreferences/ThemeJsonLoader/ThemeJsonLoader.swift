@@ -36,7 +36,7 @@ class ThemeJsonLoader {
             let url = URL(fileURLWithPath: path)
             do {
                 let data = try Data(contentsOf: url)
-                return themeFromVscJson(jsonStr: String(decoding: data, as: UTF8.self))
+                return themeFromVscJson(jsonStr: String(data: data, encoding: .utf8) ?? "")
             } catch {
                 self.logger.fault("\(error)")
             }

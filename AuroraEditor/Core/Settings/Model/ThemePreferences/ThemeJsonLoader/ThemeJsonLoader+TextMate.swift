@@ -21,7 +21,7 @@ extension ThemeJsonLoader {
             let data = try Data(contentsOf: url)
 
             // account for the possibility that the .tmTheme is in JSON format, not XML/Plist
-            if let jsonData = String(decoding: data, as: UTF8.self).data(using: .utf8),
+            if let jsonData = String(data: data, encoding: .utf8)?.data(using: .utf8),
                let json = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any],
                let asJson = themeFromTmThemeJson(json: json) {
                 return asJson

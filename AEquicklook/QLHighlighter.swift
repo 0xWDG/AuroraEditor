@@ -23,21 +23,22 @@ class QLHighlighter {
     /// 
     /// - Parameter contents: The contents
     init(contents: Data) {
-        self.code = String(decoding: contents, as: UTF8.self)
-            .replacingOccurrences(of: "<", with: "&lt;")
-            .replacingOccurrences(of: ">", with: "&gt;")
-
-        guard let cssFilePath = Bundle.main.path(forResource: "highlight", ofType: "css"),
+        guard var codeContents = String(data: contents, encoding: .utf8),
+              let cssFilePath = Bundle.main.path(forResource: "highlight", ofType: "css"),
               let cssContents = try? String(contentsOfFile: cssFilePath),
               let jsFilePath = Bundle.main.path(forResource: "highlight", ofType: "js"),
               let jsContents = try? String(contentsOfFile: jsFilePath) else {
             self.javaScript = ""
             self.css = ""
+            self.code = ""
             return
         }
 
         self.css = cssContents
         self.javaScript = jsContents
+        self.code = codeContents
+            .replacingOccurrences(of: "<", with: "&lt;")
+            .replacingOccurrences(of: ">", with: "&gt;")
     }
 
     /// Build the HTML

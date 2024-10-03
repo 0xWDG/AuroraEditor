@@ -120,8 +120,9 @@ extension TabHierarchyViewController: NSOutlineViewDataSource {
         // encode the item using jsonencoder
         let pboarditem = NSPasteboardItem()
         let jsonEncoder = JSONEncoder()
-        guard let jsonData = try? jsonEncoder.encode(item) else { return nil }
-        pboarditem.setString(String(decoding: jsonData, as: UTF8.self), forType: .string)
+        guard let jsonData = try? jsonEncoder.encode(item),
+              let jsonValue = String(data: jsonData, encoding: .utf8) else { return nil }
+        pboarditem.setString(jsonValue, forType: .string)
         return pboarditem
     }
 
