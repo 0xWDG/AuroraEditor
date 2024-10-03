@@ -396,6 +396,7 @@
 		2B3DAA502BFD24C500A7773D /* QLHighlighter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B3DAA4F2BFD24C500A7773D /* QLHighlighter.swift */; };
 		2B48F7422C03B62F000EAD67 /* highlight.js in Resources */ = {isa = PBXBuildFile; fileRef = 2B48F7412C03B62F000EAD67 /* highlight.js */; };
 		2B48F7442C03B63E000EAD67 /* highlight.css in Resources */ = {isa = PBXBuildFile; fileRef = 2B48F7432C03B63E000EAD67 /* highlight.css */; };
+		2B4E86942C7E0AAF002EF049 /* notifyExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B4E86932C7E0AAF002EF049 /* notifyExtensions.swift */; };
 		2B53D1FF2B77A82D0064114F /* AuroraEditorConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B53D1FD2B77A2660064114F /* AuroraEditorConfig.swift */; };
 		2B56E13F2C3DAE2700A80B6C /* BroadcastHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B56E13E2C3DAE2700A80B6C /* BroadcastHandler.swift */; };
 		2B56E1412C3DAED000A80B6C /* ExtensionDynamicData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B56E1402C3DAED000A80B6C /* ExtensionDynamicData.swift */; };
@@ -1051,6 +1052,7 @@
 		2B3DAA4F2BFD24C500A7773D /* QLHighlighter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QLHighlighter.swift; sourceTree = "<group>"; };
 		2B48F7412C03B62F000EAD67 /* highlight.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = highlight.js; sourceTree = "<group>"; };
 		2B48F7432C03B63E000EAD67 /* highlight.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = highlight.css; sourceTree = "<group>"; };
+		2B4E86932C7E0AAF002EF049 /* notifyExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = notifyExtensions.swift; path = AuroraEditor/Core/ExtensionSystem/Helpers/notifyExtensions.swift; sourceTree = SOURCE_ROOT; };
 		2B53D1FB2B77A2250064114F /* AuroraEditorConfigTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuroraEditorConfigTests.swift; sourceTree = "<group>"; };
 		2B53D1FD2B77A2660064114F /* AuroraEditorConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuroraEditorConfig.swift; sourceTree = "<group>"; };
 		2B56E13E2C3DAE2700A80B6C /* BroadcastHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BroadcastHandler.swift; sourceTree = "<group>"; };
@@ -1951,6 +1953,7 @@
 		20D837BC289A7ACD00D91D05 /* ExtensionSystem */ = {
 			isa = PBXGroup;
 			children = (
+				2B4E86922C7E0A79002EF049 /* Helpers */,
 				2B56E1422C3DB2CB00A80B6C /* ExtensionDocumentation */,
 				20D837BF289A7ACD00D91D05 /* Models */,
 				20D83912289A80E700D91D05 /* Network */,
@@ -2997,6 +3000,14 @@
 				2B3DAA4F2BFD24C500A7773D /* QLHighlighter.swift */,
 			);
 			path = AEquicklook;
+			sourceTree = "<group>";
+		};
+		2B4E86922C7E0A79002EF049 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				2B4E86932C7E0AAF002EF049 /* notifyExtensions.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 		2B56E1422C3DB2CB00A80B6C /* ExtensionDocumentation */ = {
@@ -4266,6 +4277,7 @@
 				2B04575828E6FFE300024F2D /* FirstLineHeadIndentThemeAttribute.swift in Sources */,
 				2093CD70289AA0FC003A88DD /* FontPickerView.swift in Sources */,
 				2B04575D28E6FFE300024F2D /* FontThemeAttribute.swift in Sources */,
+				2B4E86942C7E0AAF002EF049 /* notifyExtensions.swift in Sources */,
 				20FACFA52AB617F000B09012 /* FontWithLineHeight.swift in Sources */,
 				2093CD9A289AA14C003A88DD /* GeneralPreferences.swift in Sources */,
 				2093CDA5289AA170003A88DD /* GeneralPreferencesView.swift in Sources */,

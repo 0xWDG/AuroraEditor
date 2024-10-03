@@ -59,6 +59,13 @@ struct CommandPaletteView: View {
 
         case 36: // enter key
             if let selectedCommand = selectedCommand {
+                ExtensionsManager.shared.sendEvent(
+                    event: "commandPalletteDidSelect",
+                    parameters: [
+                        "name": selectedCommand.name
+                    ]
+                )
+
                 selectedCommand.command()
             }
             self.onClose()
@@ -154,6 +161,7 @@ struct CommandPaletteView: View {
                 .listStyle(.sidebar)
             }
         }
+        .notifyExtensions(name: "commandPalette")
         .background(EffectView(.sidebar, blendingMode: .behindWindow))
         .edgesIgnoringSafeArea(.vertical)
         .frame(minWidth: 600,

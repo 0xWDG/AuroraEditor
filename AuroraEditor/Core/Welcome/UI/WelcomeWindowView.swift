@@ -77,6 +77,7 @@ public struct WelcomeWindowView: View {
                 )
             }
             .edgesIgnoringSafeArea(.top)
+            .notifyExtensions(name: "welcome")
         }
     }
 }

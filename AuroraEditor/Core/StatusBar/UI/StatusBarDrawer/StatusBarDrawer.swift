@@ -40,7 +40,17 @@ internal struct StatusBarDrawer: View {
     internal var body: some View {
         VStack(spacing: 0) {
             switch model.selectedTab {
-            case 0: TerminalEmulatorView(url: model.workspaceURL)
+            case 0:
+                TerminalEmulatorView(url: model.workspaceURL)
+                    .notifyExtensions(
+                        name: "terminal",
+                        appear: [
+                            "path": model.workspaceURL.relativePath
+                        ],
+                        disappear: [
+                            "path": model.workspaceURL.relativePath
+                        ]
+                    )
             default: Rectangle().foregroundColor(Color(nsColor: .textBackgroundColor))
             }
             HStack(alignment: .center, spacing: 10) {

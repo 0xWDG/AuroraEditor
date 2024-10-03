@@ -12,6 +12,17 @@ import AEExtensionKit
 /// This class does not execute any code, this is made to generate documentation for the extension system
 /// This are items which an extension can expect from AuroraEditor.
 /// To see what you can send to Aurora Editor see ``ExtensionDocumentationToAuroraEditor``.
+///
+/// To send a command from Aurora Editor to the extensions use:
+///
+/// ```swift
+/// ExtensionsManager.shared.sendEvent(
+///     event: "auroraeditorDidChangeFontNameTo",
+///     parameters: [
+///         "name": "Aurora Editor Font"
+///     ]
+/// )
+/// ```
 public protocol ExtensionDocumentationFromAuroraEditor {
     /// Build the editor view for a specific file.
     ///
@@ -123,4 +134,73 @@ public protocol ExtensionDocumentationFromAuroraEditor {
     /// - Parameter identifier: Notification identifier
     /// - Parameter extension: Extension name
     func didDismissNotification(identifier: String, extension: String)
+
+    /// Command pallette did appear
+    func commandPalletteDidAppear()
+
+    /// Command pallette did disappear
+    func commandPalletteDidDisappear()
+
+    /// Command palette did select (run)
+    /// 
+    /// - Parameter name: Command name
+    func commandPalletteDidSelect(name: String)
+
+    /// Welcome window did appear
+    func welcomeDidAppear()
+
+    /// Welcome window did disappear
+    func welcomeDidDisappear()
+
+    /// Terminal did appear
+    ///
+    /// - Parameter path: Current Terminal Path
+    func terminalDidAppear(path: String)
+
+    /// Terminal did appear
+    ///
+    /// - Parameter path: Current Terminal Path
+    func terminalDidDisappear(path: String)
+
+    /// Preferences did appear
+    func preferencesDidAppear()
+
+    /// Preferences did disappear
+    func preferencesDidDisppear()
+
+    /// Project navigator did appear
+    func projectNavigatorDidAppear()
+
+    /// Project navigator did disappear
+    func projectNavigatorDidDisappear()
+
+    /// Source control navigator did appear
+    func sourceControlNavigatorDidAppear()
+
+    /// Source control navigator did disappear
+    func sourceControlNavigatorDidDisappear()
+
+    /// Find navigator did appear
+    func findNavigatorDidAppear()
+
+    /// Find navigator did disappear
+    func findNavigatorDidDisappear()
+
+    /// Notifications navigator did appear
+    func notificationsNavigatorDidAppear()
+
+    /// Notifications navigator did disappear
+    func notificationsNavigatorDidDisappear()
+
+    /// Hierarchy navigator did appear
+    func hierarchyNavigatorDidAppear()
+
+    /// Hierarchy navigator did disappear
+    func hierarchyNavigatorDidDisappear()
+
+    /// Extension navigator did appear
+    func extensionNavigatorDidAppear()
+
+    /// Extension navigator did disappear
+    func extensionNavigatorDidDisappear()
 }

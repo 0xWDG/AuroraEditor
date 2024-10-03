@@ -68,6 +68,7 @@ struct PreferencesView: View {
                 maxHeight: .infinity
             )
         }
+        .notifyExtensions(name: "preferences")
     }
 
     /// The setting content view

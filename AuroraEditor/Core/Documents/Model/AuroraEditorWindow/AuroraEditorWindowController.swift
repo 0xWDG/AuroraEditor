@@ -215,6 +215,11 @@ final class AuroraEditorWindowController: NSWindowController, ObservableObject {
             // if the panel exists, is open and is actually a command palette, close it.
             if let commandPalettePanel = overlayPanel, commandPalettePanel.isKeyWindow &&
                 commandPalettePanel.viewType ?? .commandPalette == .commandPalette {
+                ExtensionsManager.shared.sendEvent(
+                    event: "commandPalletteDidDisappear",
+                    parameters: [:]
+                )
+
                 commandPalettePanel.close()
                 return
             }
@@ -222,7 +227,14 @@ final class AuroraEditorWindowController: NSWindowController, ObservableObject {
             let panel = OverlayPanel()
             configureOverlayPanel(panel: panel, content: NSHostingView(rootView: CommandPaletteView(
                 state: state,
-                onClose: { panel.close() },
+                onClose: {
+                    ExtensionsManager.shared.sendEvent(
+                        event: "commandPalletteDidDisappear",
+                        parameters: [:]
+                    )
+
+                    panel.close()
+                },
                 openFile: workspace.openTab(item:)
             )), viewType: .commandPalette)
             self.overlayPanel = panel
