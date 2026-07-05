@@ -109,7 +109,7 @@ struct SourceControlNavigatorView: View {
                 let count = try Int.fetchOne(database, sql: """
                     SELECT COUNT(*) FROM \(AccountPreferences.databaseTableName)
                     """) ?? 0
-                return count > 0 // swiftlint:disable:this empty_count
+                return count > 0
             }
         } catch {
             return false

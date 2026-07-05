@@ -318,22 +318,56 @@ class GitHubActions: ObservableObject {
                 directoryURL: workspace.workspaceURL(),
                 name: "origin"
             )
-            let remoteURL = URL(string: remote!)
+
+            guard let remote else {
+                logger.fault("Failed to get project remote URL.")
+                state = .repoFailure
+                objectWillChange.send()
+                return
+            }
 
             // As caution we check if the origin contains git@ so we can fetch the repo
             // info in one of two ways.
-            if remote?.contains("git@") ?? false {
+            if remote.contains("git@") {
                 // git@github.com:AuroraEditor/AuroraEditor.git
-                let splitGit = remote?.split(separator: ":")
-                let splitRepoDetails = splitGit?[1].split(separator: "/")
+                let splitGit = remote.split(separator: ":")
+                guard splitGit.count > 1 else {
+                    logger.fault("Unable to parse Git remote URL: \(remote)")
+                    state = .repoFailure
+                    objectWillChange.send()
+                    return
+                }
 
-                repoOwner = splitRepoDetails?[0].description ?? ""
-                repo = splitRepoDetails?[1].description.replacingOccurrences(of: ".git", with: "") ?? ""
+                let splitRepoDetails = splitGit[1].split(separator: "/")
+
+                guard splitRepoDetails.count > 1 else {
+                    logger.fault("Unable to parse Git remote repository path: \(remote)")
+                    state = .repoFailure
+                    objectWillChange.send()
+                    return
+                }
+
+                repoOwner = splitRepoDetails[0].description
+                repo = splitRepoDetails[1].description.replacingOccurrences(of: ".git", with: "")
             } else {
-                let remoteSplit = remoteURL?.pathComponents
-                repoOwner = remoteSplit?[1] ?? ""
+                guard let remoteURL = URL(string: remote) else {
+                    logger.fault("Unable to parse Git remote URL: \(remote)")
+                    state = .repoFailure
+                    objectWillChange.send()
+                    return
+                }
 
-                let repoValue = remoteSplit?[2] ?? ""
+                let remoteSplit = remoteURL.pathComponents
+                guard remoteSplit.count > 2 else {
+                    logger.fault("Unable to parse Git remote repository path: \(remote)")
+                    state = .repoFailure
+                    objectWillChange.send()
+                    return
+                }
+
+                repoOwner = remoteSplit[1]
+
+                let repoValue = remoteSplit[2]
                 repo = repoValue.replacingOccurrences(of: ".git", with: "")
             }
             self.objectWillChange.send()

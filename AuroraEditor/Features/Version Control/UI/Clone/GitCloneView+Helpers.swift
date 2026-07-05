@@ -20,21 +20,19 @@ extension GitCloneView {
         dialog.nameFieldLabel = "Clone as"
         dialog.title = "Clone"
 
-        if dialog.runModal() == NSApplication.ModalResponse.OK {
-            let result = dialog.url
-
-            if result != nil {
-                let path: String = result!.path
-                // path contains the directory path e.g
-                // /Users/ourcodeworld/Desktop/folder
-                modifiable = path
-                return path
-            }
-        } else {
+        guard dialog.runModal() == NSApplication.ModalResponse.OK else {
             // User clicked on "Cancel"
             return nil
         }
-        return nil
+
+        guard let path = dialog.url?.path else {
+            return nil
+        }
+
+        // path contains the directory path e.g
+        // /Users/ourcodeworld/Desktop/folder
+        modifiable = path
+        return path
     }
 
     func showAlert(alertMsg: String, infoText: String) {

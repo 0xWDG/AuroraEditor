@@ -204,11 +204,7 @@ public struct CodeEditorViewWrapper: View {
     /// - Returns: The code language
     private func getLanguage() -> CodeLanguage {
         guard let url = codeFile.fileURL else {
-            guard let plainText = CodeLanguage.allLanguages.first(where: { $0.tsName == "PlainText" }) else {
-                fatalError("Unable to get plain text code language")
-            }
-
-            return plainText
+            return PlainTextLanguageHandler().getLanguage()
         }
 
         return CodeLanguage.detectLanguageFrom(url: url)

@@ -11,6 +11,7 @@ import Foundation
 import OSLog
 
 /// The state of the command palette.
+@MainActor
 public final class CommandPaletteState: ObservableObject {
     /// The query of the command palette.
     @Published
@@ -28,11 +29,8 @@ public final class CommandPaletteState: ObservableObject {
     @Published
     var isShowingCommands: Bool = false
 
-    /// The queue to perform the search.
-    private let queue = DispatchQueue(label: "com.auroraeditor.quickOpen.commandPalette")
-
     /// Logger
-    let logger = Logger(subsystem: "com.auroraeditor", category: "Command Pallete State")
+    let logger = Logger(subsystem: "com.auroraeditor", category: "Command Palette State")
 
     /// Creates a new instance of the command palette state.
     init(possibleCommands: [Command] = []) {
@@ -41,24 +39,20 @@ public final class CommandPaletteState: ObservableObject {
 
     /// Fetches the commands that match the query.
     func fetchCommands() {
-        guard !commandQuery.isEmpty else {
+        let query = commandQuery.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        guard !query.isEmpty else {
             self.logger.info("Query is empty")
-            DispatchQueue.main.async {
-                self.commands = []
-                self.isShowingCommands = false
-            }
+            commands = []
+            isShowingCommands = false
             return
         }
 
-        queue.async { [weak self] in
-            guard let self = self else { return }
-            DispatchQueue.main.async {
-                self.commands = self.possibleCommands.filter({
-                    $0.name.lowercased().contains(self.commandQuery.lowercased())
-                }).sorted(by: { $0.name.count < $1.name .count })
-                self.isShowingCommands = !self.commands.isEmpty
-            }
-        }
+        let lowercasedQuery = query.lowercased()
+        commands = possibleCommands
+            .filter { $0.name.lowercased().contains(lowercasedQuery) }
+            .sorted { $0.name.count < $1.name.count }
+        isShowingCommands = !commands.isEmpty
     }
 
     /// Adds a command to the possible commands.

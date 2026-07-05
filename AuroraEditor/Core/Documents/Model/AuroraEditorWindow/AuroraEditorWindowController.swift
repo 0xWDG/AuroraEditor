@@ -8,6 +8,7 @@
 
 import SwiftUI
 import Combine
+import OSLog
 
 /// The window controller for Aurora Editor.
 @MainActor
@@ -32,6 +33,9 @@ final class AuroraEditorWindowController: NSWindowController, ObservableObject {
 
     /// The set of cancelables.
     var cancelables: Set<AnyCancellable> = .init()
+
+    /// Logger
+    let logger = Logger(subsystem: "com.auroraeditor", category: "Aurora Editor Window Controller")
 
     /// The split view controller.
     var splitViewController: AuroraSplitViewController! {
@@ -195,7 +199,8 @@ final class AuroraEditorWindowController: NSWindowController, ObservableObject {
     /// - Parameter sender: The sender.
     @IBAction func saveDocument(_ sender: Any) {
         guard let file = getSelectedCodeFile() else {
-            fatalError("Cannot get file")
+            logger.fault("Cannot get file")
+            return
         }
 
         ExtensionsManager.shared.sendEvent(
@@ -203,7 +208,12 @@ final class AuroraEditorWindowController: NSWindowController, ObservableObject {
             parameters: ["file": file.fileURL?.relativeString ?? "Unknown"]
         )
 
-        file.saveFileDocument()
+        do {
+            try file.saveFileDocument()
+        } catch let error {
+            logger.fault("Failed to save document: \(error.localizedDescription)")
+            return
+        }
 
         workspace.convertTemporaryTab()
     }

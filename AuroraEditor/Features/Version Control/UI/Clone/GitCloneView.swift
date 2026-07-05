@@ -66,10 +66,19 @@ public struct GitCloneView: View {
 
     func getRemoteHead(url: String) {
         do {
-            guard let branch = try Remote().getRemoteHEAD(directoryURL: URL(string: url)!,
-                                                          remote: "remoteName") else {
-                throw fatalError()
+            guard let remoteURL = URL(string: url) else {
+                logger.warning("Invalid remote URL: \(url)")
+                activeSheet = .error("Invalid remote URL")
+                return
             }
+
+            guard let branch = try Remote().getRemoteHEAD(directoryURL: remoteURL,
+                                                          remote: "remoteName") else {
+                logger.warning("Error: getRemoteHead")
+                activeSheet = .error("Error: getRemoteHead")
+                return
+            }
+
             if branch.contains("fatal:") {
                 self.logger.warning("Error: getRemoteHead")
                 activeSheet = .error("Error: getRemoteHead")
@@ -89,7 +98,13 @@ public struct GitCloneView: View {
 
     func getGitRemoteBranch(url: String) {
         do {
-            let branches = try Remote().getRemotes(directoryURL: URL(string: url)!)
+            guard let remoteURL = URL(string: url) else {
+                logger.warning("Invalid remote URL: \(url)")
+                activeSheet = .error("Invalid remote URL")
+                return
+            }
+
+            let branches = try Remote().getRemotes(directoryURL: remoteURL)
 
             if branches.isEmpty {
                 self.logger.warning("Error: getRemoteBranch")

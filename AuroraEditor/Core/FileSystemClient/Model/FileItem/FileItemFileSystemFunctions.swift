@@ -35,7 +35,7 @@ extension FileItem {
                                                     withIntermediateDirectories: true,
                                                     attributes: [:])
         } catch {
-            fatalError(error.localizedDescription)
+            logger.fault("Failed to create folder at \(folderUrl.path): \(error.localizedDescription)")
         }
     }
 
@@ -76,11 +76,15 @@ extension FileItem {
         }
 
         // Create the file
-        FileItem.fileManger.createFile(
+        let didCreateFile = FileItem.fileManger.createFile(
             atPath: fileUrl.path,
             contents: nil,
             attributes: [FileAttributeKey.creationDate: Date()]
         )
+
+        if !didCreateFile {
+            logger.fault("Failed to create file at \(fileUrl.path)")
+        }
     }
 
     /// Nearest folder refers to the parent directory if this is a non-folder item, or itself if the item is a folder.
@@ -110,7 +114,7 @@ extension FileItem {
                         resultingItemURL: nil
                     )
                 } catch {
-                    fatalError(error.localizedDescription)
+                    logger.fault("Failed to delete \(self.url.path): \(error.localizedDescription)")
                 }
             }
         }
@@ -134,7 +138,6 @@ extension FileItem {
                 try FileItem.fileManger.copyItem(at: self.url, to: fileUrl)
             } catch {
                 self.logger.fault("Error at \(self.url.path) to \(fileUrl.path)")
-                fatalError(error.localizedDescription)
             }
         }
     }
@@ -149,7 +152,9 @@ extension FileItem {
         do {
             self.logger.info("Moving file \(self.url.debugDescription) to \(newLocation.debugDescription)")
             try FileItem.fileManger.moveItem(at: self.url, to: newLocation)
-        } catch { fatalError(error.localizedDescription) }
+        } catch {
+            logger.fault("Failed to move \(self.url.path) to \(newLocation.path): \(error.localizedDescription)")
+        }
 
         // This function recursively creates missing directories if the file is moved to a directory that does not exist
         func createMissingParentDirectory(for url: URL, createSelf: Bool = true) {
@@ -166,7 +171,7 @@ extension FileItem {
                                                             withIntermediateDirectories: true,
                                                             attributes: [:])
                 } catch {
-                    fatalError(error.localizedDescription)
+                    logger.fault("Failed to create folder at \(url.path): \(error.localizedDescription)")
                 }
             }
         }

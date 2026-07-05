@@ -135,10 +135,6 @@ public struct QuickOpenView: View {
                                 self.onClose()
                             }
                             .accessibilityAddTraits(.isButton)
-                            .onTapGesture(count: 1) {
-                                self.selectedItem = file
-                            }
-                            .accessibilityAddTraits(.isButton)
                         }
                         .frame(minWidth: 250, maxWidth: 250)
                         if state.openQuicklyFiles.isEmpty {
@@ -147,12 +143,15 @@ public struct QuickOpenView: View {
                             Text("Select a file to preview")
                         }
 
-                        Button("") {
+                        Button {
                             if let selectedItem = selectedItem {
                                 self.openFile(selectedItem)
                                 self.onClose()
                             }
+                        } label: {
+                            EmptyView()
                         }
+                        .accessibilityLabel(Text("Open Selected File"))
                         .buttonStyle(.borderless)
                         .keyboardShortcut(.defaultAction)
                     }

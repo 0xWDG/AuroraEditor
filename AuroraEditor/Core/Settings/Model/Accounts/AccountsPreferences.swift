@@ -85,7 +85,7 @@ struct AccountPreferences: Codable, FetchableRecord,
                 let count = try Int.fetchOne(database, sql: """
                     SELECT COUNT(*) FROM \(databaseTableName)
                     """) ?? 0
-                return count > 0 // swiftlint:disable:this empty_count
+                return count > 0
             }
         } catch {
             return false

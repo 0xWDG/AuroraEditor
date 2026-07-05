@@ -8,22 +8,19 @@
 
 import SwiftUI
 
-public struct QuickOpenPreviewView: View, Sendable {
-    /// Queue
-    private let queue = DispatchQueue(label: "com.auroraeditor.quickOpen.preview")
-
+public struct QuickOpenPreviewView: View {
     /// File item
     private let item: FileSystemClient.FileItem
 
-    /// Initialize a new QuickOpenPreviewView
+    /// Code file document.
     @State
-    private var content: String = ""
+    private var codeFile: CodeFileDocument?
 
-    /// Initialize a new QuickOpenPreviewView
+    /// True when preview loading is in progress.
     @State
-    private var loaded = false
+    private var isLoading = true
 
-    /// Initialize a new QuickOpenPreviewView
+    /// Preview loading error.
     @State
     private var error: String?
 
@@ -39,11 +36,7 @@ public struct QuickOpenPreviewView: View, Sendable {
     /// The view body.
     public var body: some View {
         VStack {
-            if let codeFile = try? CodeFileDocument(
-                for: item.url,
-                withContentsOf: item.url,
-                ofType: "public.source-code"
-            ), loaded {
+            if let codeFile {
                 // "Quick Look" function, need to pass a empty env here as well.
                 CodeEditorViewWrapper(
                     codeFile: codeFile,
@@ -52,24 +45,29 @@ public struct QuickOpenPreviewView: View, Sendable {
                 ).environmentObject(WorkspaceDocument())
             } else if let error = error {
                 Text(error)
-            } else {
+            } else if isLoading {
                 ProgressView()
+                    .accessibilityLabel(Text("Loading file preview"))
+            } else {
+                EmptyView()
             }
         }
-        .onAppear {
-            loaded = false
+        .task(id: item.url) {
+            codeFile = nil
             error = nil
-            queue.async {
-                do {
-                    let data = try String(contentsOf: item.url)
-                    DispatchQueue.main.async {
-                        self.content = data
-                        self.loaded = true
-                    }
-                } catch let error {
-                    self.error = error.localizedDescription
-                }
+            isLoading = true
+
+            do {
+                codeFile = try CodeFileDocument(
+                    for: item.url,
+                    withContentsOf: item.url,
+                    ofType: item.url.pathExtension
+                )
+            } catch let error {
+                self.error = error.localizedDescription
             }
+
+            isLoading = false
         }
     }
 }

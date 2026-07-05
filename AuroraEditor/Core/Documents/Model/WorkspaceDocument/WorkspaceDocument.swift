@@ -117,11 +117,7 @@ class WorkspaceDocument: NSDocument, ObservableObject, NSToolbarDelegate {
     ///
     /// This is a safe-wrapper for `fileURL`
     var documentURL: URL {
-        guard let url = self.fileURL else {
-            fatalError("The WorkspaceDocument doesn't have a file URL")
-        }
-
-        return url
+        fileURL ?? folderURL
     }
 
     /// Workspace Folder URL

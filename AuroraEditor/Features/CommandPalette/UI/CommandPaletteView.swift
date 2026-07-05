@@ -137,22 +137,21 @@ struct CommandPaletteView: View {
                                 self.onClose()
                             }
                             .accessibilityAddTraits(.isButton)
-                            .onTapGesture(count: 1) {
-                                self.selectedCommand = command
-                            }
-                            .accessibilityAddTraits(.isButton)
                             .background(self.selectedCommand == command ?
                                         RoundedRectangle(cornerRadius: 5, style: .continuous)
                                 .fill(Color(red: 0, green: 0.38, blue: 0.816, opacity: 0.85)) :
                                             RoundedRectangle(cornerRadius: 5, style: .continuous)
                                 .fill(Color.clear))
 
-                        Button("") {
+                        Button {
                             if let selectedCommand = selectedCommand {
                                 selectedCommand.command()
                                 self.onClose()
                             }
+                        } label: {
+                            EmptyView()
                         }
+                        .accessibilityLabel(Text("Run Selected Command"))
                         .buttonStyle(.borderless)
                         .keyboardShortcut(.defaultAction)
                     }

@@ -95,7 +95,8 @@ public final class ThemeModel: ObservableObject {
                     .allProperties()
                     .filter({ $0.value is AuroraTheme.Attributes }) as? [String: AuroraTheme.Attributes]
                 else {
-                    fatalError("failed to load terminal and editor colors")
+                    logger.fault("Failed to load terminal and editor colors for \(theme.name)")
+                    return
                 }
 
                 if let overrides = prefs.theme.overrides[theme.name]?["terminal"] {

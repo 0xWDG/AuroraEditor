@@ -27,8 +27,8 @@ public final class QuickOpenState: ObservableObject {
     /// File URL
     public let fileURL: URL
 
-    /// Queue
-    private let queue = DispatchQueue(label: "com.auroraeditor.quickOpen.searchFiles")
+    /// Current search task.
+    private var searchTask: Task<Void, Never>?
 
     /// Initialize a new QuickOpenState
     /// 
@@ -41,41 +41,85 @@ public final class QuickOpenState: ObservableObject {
 
     /// Fetch open quickly
     func fetchOpenQuickly() {
-        guard !openQuicklyQuery.isEmpty else {
+        searchTask?.cancel()
+
+        let query = openQuicklyQuery.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        guard !query.isEmpty else {
             openQuicklyFiles = []
-            self.isShowingOpenQuicklyFiles = !openQuicklyFiles.isEmpty
+            isShowingOpenQuicklyFiles = false
             return
         }
 
-        queue.async { [weak self] in
-            guard let self = self else { return }
-            let enumerator = FileManager.default.enumerator(
-                at: self.fileURL,
-                includingPropertiesForKeys: [
-                    .isRegularFileKey
-                ],
-                options: [
-                    .skipsHiddenFiles,
-                    .skipsPackageDescendants
-                ]
-            )
-            if let filePaths = enumerator?.allObjects as? [URL] {
-                let files = filePaths.filter { url in
-                    let state1 = url.lastPathComponent.lowercased().contains(self.openQuicklyQuery.lowercased())
-                    do {
-                        let values = try url.resourceValues(forKeys: [.isRegularFileKey])
-                        return state1 && (values.isRegularFile ?? false)
-                    } catch {
-                        return false
-                    }
-                }.map { url in
-                    FileSystemClient.FileItem(url: url, children: nil)
+        let directoryURL = fileURL
+        searchTask = Task { [weak self] in
+            let files = await Task.detached(priority: .userInitiated) {
+                Self.matchingFiles(
+                    in: directoryURL,
+                    query: query
+                )
+            }.value
+
+            guard !Task.isCancelled else { return }
+
+            guard self?.openQuicklyQuery.trimmingCharacters(in: .whitespacesAndNewlines) == query else {
+                return
+            }
+
+            self?.openQuicklyFiles = files
+            self?.isShowingOpenQuicklyFiles = !files.isEmpty
+        }
+    }
+
+    /// Finds regular files matching the query.
+    ///
+    /// - Parameter directoryURL: The directory to search.
+    /// - Parameter query: The lowercased query string.
+    ///
+    /// - Returns: Matching file items.
+    nonisolated private static func matchingFiles(
+        in directoryURL: URL,
+        query: String
+    ) -> [FileSystemClient.FileItem] {
+        let lowercasedQuery = query.lowercased()
+        let resourceKeys: [URLResourceKey] = [.isRegularFileKey]
+        let enumerator = FileManager.default.enumerator(
+            at: directoryURL,
+            includingPropertiesForKeys: resourceKeys,
+            options: [
+                .skipsHiddenFiles,
+                .skipsPackageDescendants
+            ]
+        )
+
+        guard let filePaths = enumerator?.allObjects as? [URL] else {
+            return []
+        }
+
+        return filePaths.compactMap { url in
+            guard url.lastPathComponent.lowercased().contains(lowercasedQuery) else {
+                return nil
+            }
+
+            do {
+                let values = try url.resourceValues(
+                    forKeys: [
+                        .isRegularFileKey
+                    ]
+                )
+
+                guard values.isRegularFile == true else {
+                    return nil
                 }
-                DispatchQueue.main.async {
-                    self.openQuicklyFiles = files
-                    self.isShowingOpenQuicklyFiles = !self.openQuicklyFiles.isEmpty
-                }
+
+                return FileSystemClient.FileItem(url: url, children: nil)
+            } catch {
+                return nil
             }
         }
+    }
+
+    deinit {
+        searchTask?.cancel()
     }
 }

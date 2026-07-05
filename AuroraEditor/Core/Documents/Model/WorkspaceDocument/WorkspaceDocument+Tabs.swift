@@ -309,10 +309,24 @@ extension WorkspaceDocument {
     /// 
     /// - Parameter item: The file item to close
     private func closeFileTab(item: FileSystemClient.FileItem) {
-        let file = selectionState.openedCodeFiles.removeValue(forKey: item)
-        if file?.typeOfFile != .image {
-            file?.saveFileDocument()
+        if let file = selectionState.openedCodeFiles[item],
+           file.typeOfFile != .image {
+            do {
+                try file.saveFileDocument()
+            } catch let error {
+                logger.fault("Failed to save \(item.fileName): \(error.localizedDescription)")
+                broadcaster.broadcast(
+                    sender: "WorkspaceDocument",
+                    command: "showError",
+                    parameters: [
+                        "message": "Unable to save \"\(item.fileName)\".\nError: \(error.localizedDescription)"
+                    ]
+                )
+                return
+            }
         }
+
+        selectionState.openedCodeFiles.removeValue(forKey: item)
 
         guard let idx = selectionState.openFileItems.firstIndex(of: item) else { return }
         selectionState.openFileItems.remove(at: idx)

@@ -2852,6 +2852,9 @@
     "Copy Path" : {
 
     },
+    "Copy Recent Project Path" : {
+
+    },
     "Copy Relative Path" : {
 
     },
@@ -5952,6 +5955,9 @@
     "Loading Extensions" : {
 
     },
+    "Loading file preview" : {
+
+    },
     "Local Path" : {
 
     },
@@ -6103,6 +6109,12 @@
 
     },
     "Open New Web Tab" : {
+
+    },
+    "Open Recent Project" : {
+
+    },
+    "Open Selected File" : {
 
     },
     "Open Update Settings" : {
@@ -7780,6 +7792,9 @@
     "Remove from Recent Projects" : {
 
     },
+    "Remove Recent Project" : {
+
+    },
     "Rename" : {
 
     },
@@ -7802,6 +7817,9 @@
 
     },
     "Reveal in Project Navigator" : {
+
+    },
+    "Run Selected Command" : {
 
     },
     "Save As:" : {

@@ -151,14 +151,13 @@ public final class CodeFileDocument: NSDocument, ObservableObject, QLPreviewItem
     /// Save document. (custom function)
     /// 
     /// This function will save the file, and check if the file is saved correctly.
-    /// If the file is not saved correctly, it will throw an fatal error.
-    public func saveFileDocument() {
-        // TODO: Make the errors non-fatal so that the user can be notified.
-        // And restore their work.
-
+    ///
+    /// - Throws: Error if the file cannot be saved.
+    public func saveFileDocument() throws {
         guard let url = self.fileURL,
               let contents = content.data(using: .utf8) else {
-            fatalError("\(#function): Failed to get URL and file type.")
+            logger.fault("\(#function): Failed to get URL and file type.")
+            throw CodeFileError.failedToEncode
         }
 
         do {
@@ -166,10 +165,12 @@ public final class CodeFileDocument: NSDocument, ObservableObject, QLPreviewItem
 
             let newContents = try? Data(contentsOf: url)
             if newContents != contents {
-                fatalError("Saving did not update the file.")
+                logger.fault("Saving did not update the file.")
+                throw CodeFileError.failedToEncode
             }
         } catch {
-            fatalError("\(#function): Failed to save, \(error.localizedDescription)")
+            logger.fault("\(#function): Failed to save, \(error.localizedDescription)")
+            throw error
         }
     }
 }

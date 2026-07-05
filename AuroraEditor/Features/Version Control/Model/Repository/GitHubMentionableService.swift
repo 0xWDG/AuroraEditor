@@ -114,8 +114,9 @@ class GitHubMentionableService {
         maxHits: Int = 20
     ) throws -> [MentionableUser] {
         let users: [MentionableUser]
-        if queryCache?.repoId == repoId {
-            users = queryCache!.users
+        if let queryCache,
+           queryCache.repoId == repoId {
+            users = queryCache.users
         } else {
             users = try getMentionableUsers(repoId: repoId)
             setQueryCache(

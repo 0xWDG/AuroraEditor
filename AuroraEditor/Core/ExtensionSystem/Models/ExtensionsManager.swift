@@ -36,14 +36,14 @@ public final class ExtensionsManager {
     init() {
         logger.info("[ExtensionsManager] init()")
 
-        guard let extensionsPath = try? FileManager.default.url(
+        let extensionsPath = (try? FileManager.default.url(
             for: .applicationSupportDirectory,
             in: .userDomainMask,
             appropriateFor: nil,
             create: true
-        ) else {
-            fatalError("Cannot load extensions directory")
-        }
+        )) ?? FileManager.default
+            .homeDirectoryForCurrentUser
+            .appendingPathComponent("Library/Application Support", isDirectory: true)
 
         self.auroraEditorFolder = extensionsPath.appendingPathComponent(
             "com.auroraeditor",

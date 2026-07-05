@@ -138,6 +138,7 @@ public struct RecentProjectsView: View {
                             Button("") {
                                 recentsStore.remove(path: projectPath)
                             }
+                            .accessibilityLabel(Text("Remove Recent Project"))
                             .buttonStyle(.borderless)
                             .keyboardShortcut(.init(.delete))
 
@@ -146,6 +147,7 @@ public struct RecentProjectsView: View {
                                 pasteboard.declareTypes([.string], owner: nil)
                                 pasteboard.setString(projectPath, forType: .string)
                             }
+                            .accessibilityLabel(Text("Copy Recent Project Path"))
                             .buttonStyle(.borderless)
                             .keyboardShortcut(.init("C", modifiers: [.command]))
                         }
@@ -155,6 +157,7 @@ public struct RecentProjectsView: View {
                                 openDocument(for: selectedProjectPath)
                             }
                         }
+                        .accessibilityLabel(Text("Open Recent Project"))
                         .buttonStyle(.borderless)
                         .keyboardShortcut(.defaultAction)
                     }

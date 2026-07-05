@@ -15,9 +15,7 @@ public struct GitIgnore {
 
     /// Read the contents of the repository .gitignore.
     ///
-    /// Returns a promise which will either be rejected or resolved
-    /// with the contents of the file. If there's no .gitignore file
-    /// in the repository root the promise will resolve with null.
+    /// If there's no .gitignore file in the repository root this returns nil.
     /// 
     /// - Parameter directoryURL: The project url
     /// 
@@ -25,9 +23,13 @@ public struct GitIgnore {
     /// 
     /// - Throws: Error
     func readGitIgnoreAtRoot(directoryURL: URL) throws -> String? {
-        let ignorePath = try String(contentsOf: directoryURL) + ".gitignore"
-        let content = try String(contentsOf: URL(string: ignorePath)!)
-        return content
+        let gitIgnoreURL = directoryURL.appendingPathComponent(".gitignore")
+
+        guard FileManager.default.fileExists(atPath: gitIgnoreURL.path) else {
+            return nil
+        }
+
+        return try String(contentsOf: gitIgnoreURL, encoding: .utf8)
     }
 
     /// Persist the given content to the repository root .gitignore.
@@ -41,15 +43,14 @@ public struct GitIgnore {
     /// - Throws: Error
     func saveGitIgnore(directoryURL: URL,
                        text: String) throws {
-        let ignorePath = try String(contentsOf: directoryURL) + ".gitignore"
-
         if text.isEmpty {
             return
         }
 
         let fileContents = try formatGitIgnoreContents(text: text,
                                                        directoryURL: directoryURL)
-        try text.write(to: URL(string: ignorePath)!, atomically: false, encoding: .utf8)
+        let gitIgnoreURL = directoryURL.appendingPathComponent(".gitignore")
+        try fileContents.write(to: gitIgnoreURL, atomically: true, encoding: .utf8)
     }
 
     /// Add the given pattern or patterns to the root gitignore file
@@ -59,9 +60,12 @@ public struct GitIgnore {
     /// 
     /// - Throws: Error
     func appendIgnoreRule(directoryURL: URL, patterns: [String]) throws {
-        let text = try readGitIgnoreAtRoot(directoryURL: directoryURL)
+        guard !patterns.isEmpty else {
+            return
+        }
 
-        let currentContents = try formatGitIgnoreContents(text: text!,
+        let text = try readGitIgnoreAtRoot(directoryURL: directoryURL) ?? ""
+        let currentContents = try formatGitIgnoreContents(text: text,
                                                           directoryURL: directoryURL)
 
         let newPatternText = patterns.joined(separator: "\n")
@@ -85,25 +89,29 @@ public struct GitIgnore {
             escapeGitSpecialCharacters(pattern: $0)
         }
 
-        return try appendIgnoreRule(directoryURL: directoryURL, patterns: escapedFilePaths)
+        try appendIgnoreRule(directoryURL: directoryURL, patterns: escapedFilePaths)
     }
 
-    // WARNING: I have a feeling this may not work, @#CK Apple
     /// Escapes a string from special characters used in a gitignore file
     /// 
     /// - Parameter pattern: The pattern to escape
     /// 
     /// - Returns: The escaped pattern
     func escapeGitSpecialCharacters(pattern: String) -> String {
-        let specialCharacters = "/[\\[\\]!\\*\\#\\?]/g"
+        let specialCharacters = Set("/[]!*#?")
 
-        return pattern.replacingOccurrences(of: specialCharacters, with: "\\")
+        return pattern.reduce(into: "") { result, character in
+            if specialCharacters.contains(character) {
+                result.append("\\")
+            }
+
+            result.append(character)
+        }
     }
 
     /// Format the gitignore text based on the current config settings.
     ///
-    /// This setting looks at core.autocrlf to decide which line endings to use
-    /// when updating the .gitignore file.
+    /// Normalizes line endings to LF and keeps a trailing newline.
     ///
     /// - Parameter text: The text to format
     /// - Parameter directoryURL: The project url
@@ -114,7 +122,13 @@ public struct GitIgnore {
     @discardableResult
     func formatGitIgnoreContents(text: String,
                                  directoryURL: URL) throws -> String {
+        let normalizedLines = text
+            .replacingOccurrences(of: "\r\n", with: "\n")
+            .replacingOccurrences(of: "\r", with: "\n")
+            .split(separator: "\n", omittingEmptySubsequences: false)
+            .map(String.init)
 
-        return ""
+        let contents = normalizedLines.joined(separator: "\n")
+        return contents.hasSuffix("\n") ? contents : "\(contents)\n"
     }
 }

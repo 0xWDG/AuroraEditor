@@ -14,9 +14,10 @@ import Foundation
 /// - parameter right: right dictionary
 /// 
 /// - returns: merged dictionary
-internal func += <KeyType, ValueType> (
+internal func += <KeyType, ValueType>(
     left: inout [KeyType: ValueType],
-    right: [KeyType: ValueType]) {
+    right: [KeyType: ValueType]
+) {
 
     for (key, val) in right {
         left.updateValue(val, forKey: key)
